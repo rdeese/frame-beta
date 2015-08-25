@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <!--skip-->
+		<title>Picture window beta</title>
+		<style>
+		body {
+			margin-top: 0px;
+			margin-bottom: 0px;
+			margin-left: 0px;
+			margin-right: 0px;
+		}
+		</style>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="/easyrtc/easyrtc.js"></script>
+		<script src="js/lib/fullscreen-api-polyfill.js"></script>
+		<script src="js/lib/headtrackr.min.js"></script>
+		<script src="js/lib/seriously.js"></script>
+		<script src="js/lib/transforms/seriously.transform3d.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+	<body>
+		<div id="otherClients"></div>
+		<button id="hangupButton" style="display:none">End call</button>
+		<div id="videos">
+			<video id="localVideo" autoplay muted style="display:none"></video>
+			<video id="remoteVideo" autoplay style="display:none"></video>
+		</div>
+		<!-- canvas for headtrackr to draw to. invisible. -->
+		<canvas id="inputCanvas" width="1280" height="720" style="display:none"></canvas>
+		<canvas id="targetCanvas" width="1280" height="720"></canvas>
+		<h1 id=headloc></h1>
+	</body>
+</html>
