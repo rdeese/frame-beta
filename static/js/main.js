@@ -7,6 +7,7 @@ var canvasInput;
 var otherClientDiv;
 var hangupButton;
 var headLocP;
+var headStatP;
 var htracker;
 var seriously;
 var localSource;
@@ -30,8 +31,8 @@ function handleUserMedia(stream) {
 	easyrtc.setVideoObjectSrc(localVideo, easyrtc.getLocalStream());
 	easyrtc.connect("cdg", connectSuccess, connectFailure);
 
+	// headtracking initialization
 	htracker.init(localVideo, canvasInput, false);
-	htracker.start();	
 	document.addEventListener('headtrackingEvent', function (e) {
 		// This translation seems natural
 		transform.translateX = 20*e.x;
@@ -42,15 +43,29 @@ function handleUserMedia(stream) {
 
 		if (e.z > 0) {
 			// this equation works well for Rupert, with Semolina, at the stand up desk.
-			// var scale = 0.03*e.z-0.05;
+			//var scale = 0.03*e.z-0.05;
 
 			// this equation seems to be friendly to users
-			var scale = 0.01*e.z + 2;
+			var scale = 0.005*e.z + 2;
 			transform.scaleX = scale;
 			transform.scaleY = scale;
 		}
 	});
+	/*
+	document.addEventListener('headtrackrStatus', function (e) {
+		//if (e.status != 'found') {
+		//  trackToNeutral();
+		//}
+		headStatP.innerHTML = e.status;
+	});
+	*/
+	htracker.start();	
 	renderLocalVideo();
+}
+
+function trackToNeutral () {
+	transform.translateX = transform.translateX - Math.ceil(transform.translateX/20);
+	transform.translateY = transform.translateY - Math.ceil(transform.translateY/20);
 }
 
 function renderLocalVideo () {
@@ -140,6 +155,7 @@ function main () {
 	otherClientDiv = document.getElementById('otherClients');
 	hangupButton = document.querySelector('#hangupButton');
 	headLocP = document.querySelector('#headloc');
+	headStatP = document.querySelector('#headstat');
 
 	// Seriously.js setup
 	seriously = new Seriously();
@@ -181,7 +197,6 @@ function main () {
 	if (name != null && name != "") {
 		easyrtc.setUsername(name);
 	}
-	easyrtc.setVideoDims(1280,720);
 	easyrtc.setRoomOccupantListener(roomListener);
 	easyrtc.setStreamAcceptor(handleRemoteMedia);
 	easyrtc.setOnStreamClosed(handleRemoteHangup);
